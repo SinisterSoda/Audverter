@@ -8,7 +8,7 @@ def main():
     #this is the default folder it traverses
     #rootdir = input("Input the Directory (Or leave blank for default directory): ")
     #r = con.convert(rootdir)
-    app = ApplicationGUI()
+    app = ApplicationGUI(con)
     app.mainloop()
     
     
