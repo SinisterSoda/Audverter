@@ -68,7 +68,13 @@ class ApplicationGUI(tk.Frame):
 
         #start log frame
         self.frameLog = tk.Frame(self)
-        self.frameLog.grid(row=2, column=0)
+        self.frameLog.grid(row=2, column=0, pady=(15,0))
+        #clear log button
+        self.logButtonImage = tk.PhotoImage(file="img/logbutton2.gif")
+        self.clearLogButton = tk.Button(self.frameLog, text="Clear Log", fg="#000000")
+        self.clearLogButton["command"] = self.clearLog
+        self.clearLogButton.grid(row=0, padx=(5,0))
+        self.clearLogButton.config(image=self.logButtonImage, width="131",height="22", compound=tk.CENTER, borderwidth=0)
         #log
         self.log = tk.Text(self.frameLog, width=60, height=20, font = "Helvetica 8")
         self.logString("Activity Monitor:")
@@ -97,6 +103,9 @@ class ApplicationGUI(tk.Frame):
 
     def logString(self, text):
         self.log.insert(tk.END, text + "\n")
+        
+    def clearLog(self):
+        self.log.delete('1.0', tk.END)
 
     def getOptionKey(self):
         val = self.formatVariable.get()
