@@ -45,11 +45,23 @@ class ApplicationGUI(tk.Frame):
         self.frameRow2 = tk.Frame(self)
         self.frameRow2.grid(row=1, column=0, sticky=tk.NW, pady=10)
 
+        #format list box
+        self.formatVariable = tk.StringVar(self)
+        self.formatOptions = {}
+        for key, value in self.converter.convertFormats.items():
+            self.formatOptions[key] = value[2]
+
+        self.formatVariable.set(self.formatOptions["alac"])
+
+        #* unpacks the variable
+        self.formatListBox = tk.OptionMenu(self.frameRow2, self.formatVariable, *self.formatOptions.values())
+        self.formatListBox.grid(row=0, sticky=tk.NW, padx=(5,0))
+
         #convert button
         self.convertButtonImage = tk.PhotoImage(file="img/button.gif")
         self.convertButton = tk.Button(self.frameRow2, text="Convert", fg="#000000")
         self.convertButton["command"] = self.convert
-        self.convertButton.grid(row=0, sticky=tk.NW, padx=(5,0))
+        self.convertButton.grid(row=1, sticky=tk.NW, padx=(5,0))
         self.convertButton.config(image=self.convertButtonImage, width="125",height="25", compound=tk.CENTER, borderwidth=0)
 
         #end middle frame
@@ -85,5 +97,15 @@ class ApplicationGUI(tk.Frame):
 
     def logString(self, text):
         self.log.insert(tk.END, text + "\n")
+
+    def getOptionKey(self):
+        val = self.formatVariable.get()
+        key = ""
+        for k,v in self.formatOptions.items():
+            if v == val:
+                key = k
+                break
+
+        return key
 
         
