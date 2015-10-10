@@ -18,7 +18,7 @@ class Converter:
     def __init__(self, ff_dir=r"\ffmpeg\bin\ffmpeg"):
         self.ffmpeg =  os.path.abspath(os.getcwd() + ff_dir)
 
-        print(self.ffmpeg)
+        #print(self.ffmpeg)
 
     
 
