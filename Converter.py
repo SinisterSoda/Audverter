@@ -5,17 +5,22 @@ import subprocess
 class Converter:
     ffmpeg = ""
     app = None
-    validExtensions = [".mp3", ".flac", ".m4a", ".wav"]
+    validExtensions = [".mp3", ".flac", ".m4a", ".wav", ".mp4", ".flv"]
 
-    #format dictionary. for the tuples, item 0 is codec, item 1 is file extension item 2 is description (for GUI)
-    convertFormats = {"alac" : ("alac", "m4a", "Apple Lossless Audio Codec(alac)"), 
-    "mp3" : ("mp3", "mp3", "MPEG (mp3)"), 
-    "flac" : ("flac", "flac", "Free Lossless Audio Codec(flac)"), 
-    "wav" : ("pcm_u8", "wav", "Waveform (wav)"), 
-    "wma" : ("wmav2", "wma", "Windows Media Audio (wma)"), 
-    "ogg" : ("libvorbis", "ogg", "Ogg Vorbis (ogg)")}
+    #format dictionary. for the tuples, item 0 is codec, item 1 is file extension item 2 is description (for GUI) item 3 is boolean whether or not its a video codec
+    convertFormats = {"alac" : ("alac", "m4a", "Apple Lossless Audio Codec(alac)", False), 
+    "mp3" : ("mp3", "mp3", "MPEG (mp3)", False), 
+    "flac" : ("flac", "flac", "Free Lossless Audio Codec(flac)", False), 
+    "wav" : ("pcm_u8", "wav", "Waveform (wav)", False), 
+    "wma" : ("wmav2", "wma", "Windows Media Audio (wma)", False), 
+    "ogg" : ("libvorbis", "ogg", "Ogg Vorbis (ogg)", False),
+    #video formats
+    "mp4" : ("", "mp4", "MPEG-4(mp4)", True)}
 
-    def __init__(self, ff_dir=r"\ffmpeg\bin\ffmpeg"):
+    def __init__(self, ff_dir=None):
+        #r"\ffmpeg\bin\ffmpeg"
+        if (ff_dir == None):
+            ff_dir = r"" + os.sep + "ffmpeg" + os.sep + "bin" + os.sep + "ffmpeg"
         self.ffmpeg =  os.path.abspath(os.getcwd() + ff_dir)
 
         #print(self.ffmpeg)
@@ -54,10 +59,14 @@ class Converter:
                 tup = self.convertFormats[k]
                 codec = tup[0]
                 ext = tup[1]
+                is_video_format = tup[3]
                 #the ffmpeg command that actually does the converting
-                command = ffmpeg + " -i \"" + f + "\" -acodec " + codec + " \"" + basef + "." + ext + "\""
-                #self.output("Running command: ")
-                #self.output(command)
+                if (is_video_format):
+                    command = ffmpeg + " -i \"" + f + "\" " + codec + " \"" + basef + "." + ext + "\""
+                else:
+                    command = ffmpeg + " -i \"" + f + "\" -acodec " + codec + " \"" + basef + "." + ext + "\""
+                self.output("Running command: ")
+                self.output(command)
 
                 #runs the actual command
                 subprocess.call(command, shell=True, stdout=outputfile)
